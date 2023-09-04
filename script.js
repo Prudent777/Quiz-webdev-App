@@ -14,7 +14,6 @@ const questions = [
         choices: ["<js>", "<javascript>", "<script>"],
         correctAnswer: 2
     },
-    // ... (ajoutez les 37 questions supplémentaires ici)
     {
         question: "Quelle balise est utilisée pour créer un lien hypertexte?",
         choices: ["<link>", "<a>", "<href>"],
@@ -25,6 +24,50 @@ const questions = [
         choices: ["text-color", "color", "font-color"],
         correctAnswer: 1
     }
+    // Ajoutez d'autres questions ici
 ];
 
-// Le reste du code JavaScript reste inchangé
+const questionElement = document.getElementById("question");
+const choicesElement = document.getElementById("choices");
+const submitButton = document.getElementById("submit");
+const resultsElement = document.getElementById("results");
+
+let currentQuestion = 0;
+let score = 0;
+
+function showQuestion() {
+    questionElement.textContent = questions[currentQuestion].question;
+    choicesElement.innerHTML = "";
+
+    questions[currentQuestion].choices.forEach((choice, index) => {
+        const choiceButton = document.createElement("button");
+        choiceButton.textContent = choice;
+        choiceButton.className = "choice";
+        choiceButton.addEventListener("click", () => checkAnswer(index));
+        choicesElement.appendChild(choiceButton);
+    });
+}
+
+function checkAnswer(selectedIndex) {
+    if (selectedIndex === questions[currentQuestion].correctAnswer) {
+        score++;
+    }
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        showQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function showResults() {
+    questionElement.textContent = "";
+    choicesElement.innerHTML = "";
+    submitButton.style.display = "none";
+    resultsElement.textContent = `Votre score: ${score} sur ${questions.length}`;
+}
+
+showQuestion();
+submitButton.addEventListener("click", () => checkAnswer());
